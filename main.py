@@ -37,6 +37,9 @@ async def getPinState(pin):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(pin, GPIO.IN)
         state = GPIO.input(pin)
+        if state == 1:
+            GPIO.setup(pin, GPIO.OUT)
+            GPIO.output(pin, True)
     except Exception as e:
         print(e)
         message = e.message
