@@ -2,6 +2,9 @@ from fastapi import FastAPI
 import RPi.GPIO as GPIO
 import time
 
+positive = [ 'on', 'active', 'true' ]
+negative = [ 'off', 'inactive', 'false' ]
+
 app = FastAPI()
 
 @app.post("/io/{pin}/state/{state}")
@@ -13,10 +16,10 @@ async def setPinState(pin, state):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(pin, GPIO.OUT)
         found = False
-        if state.lower() == "on":
+        if state.lower() in positive:
           GPIO.output(pin, True)
           found = True
-        elif state.lower() == "off":
+        elif state.lower() in negative:
           GPIO.output(pin, False)
           found = True
         else:
