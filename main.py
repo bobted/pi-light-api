@@ -120,7 +120,10 @@ async def main():
             print(f"Error '{error}'. Reconnecting in {reconnect_interval} seconds.")
             await asyncio.sleep(reconnect_interval)
 
-asyncio.run(main())
-#@app.on_event("startup")
-#async def startup_event():
-#    asyncio.create_task(main())
+### for running in console w/o endpionts
+#asyncio.run(main())
+
+### for running as service
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(main())
