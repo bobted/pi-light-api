@@ -1,6 +1,11 @@
 from fastapi import FastAPI
 import RPi.GPIO as GPIO
-import time
+import time, yaml, signal, os, re
+from cryptography.fernet import Fernet
+import paho.mqtt.client as mqtt
+import asyncio_mqtt as mqtt_async
+import asyncio
+import urllib.parse
 
 positive = [ 'on', 'active', 'true' ]
 negative = [ 'off', 'inactive', 'false' ]
@@ -76,3 +81,46 @@ async def getPinState(pin):
 
     return {"pin": pin, "state": state, "found": found, "message": message}
 
+async def on_message(msg):
+    try:
+        pin = msg.topic.split('/') [-1]
+        state = msg.payload.decode('utf-8')
+        response = await setPinState(pin, state)
+        print (f"Pin '{str(response['pin'])}' was set to '{response['state']}' with message '{response['message']}' from '{msg.topic}'")
+    except Exception as e:
+        print (f"Unable to process message with error: {str(e)}")
+
+def readConfig():
+    with open('filekey.key', 'rb') as filekey:
+        key = filekey.read()
+    with open('config.yaml', 'rb') as input:
+        encrypted = input.read()
+
+    fernet = Fernet(key)
+    config = fernet.decrypt(encrypted)
+    return yaml.safe_load(config)
+
+def signal_handler(signal, frame):
+    print('Disconnecting')
+    client.disconnect()
+
+async def main():
+    config = readConfig()
+    reconnect_interval = 5
+    while True:
+        try:
+            print(f"Connecting to '{config['mqtt']['server']}'")
+            async with mqtt_async.Client(config["mqtt"]["server"], username=config["mqtt"]["user"], password=config["mqtt"]["password"]) as client:
+                async with client.unfiltered_messages() as messages:
+                    print(f"Subscribing to '{config['mqtt']['topic']}'")
+                    await client.subscribe(config["mqtt"]["topic"])
+                    async for message in messages:
+                        await on_message(message)
+        except mqtt_async.MqttError as error:
+            print(f"Error '{error}'. Reconnecting in {reconnect_interval} seconds.")
+            await asyncio.sleep(reconnect_interval)
+
+asyncio.run(main())
+#@app.on_event("startup")
+#async def startup_event():
+#    asyncio.create_task(main())

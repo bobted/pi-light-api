@@ -1,0 +1,8 @@
+fastapi
+cryptography
+paho-mqtt
+PyYAML
+urllib3
+typing_extensions
+asyncio
+asyncio-mqtt
