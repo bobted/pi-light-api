@@ -81,14 +81,16 @@ async def getPinState(pin):
 
     return {"pin": pin, "state": state, "found": found, "message": message}
 
-async def on_message(msg):
+async def on_message(msg) -> bool:
     try:
         pin = msg.topic.split('/') [-1]
         state = msg.payload.decode('utf-8')
         response = await setPinState(pin, state)
         print (f"Pin '{str(response['pin'])}' was set to '{response['state']}' with message '{response['message']}' from '{msg.topic}'")
+        return True
     except Exception as e:
         print (f"Unable to process message with error: {str(e)}")
+        return False
 
 def readConfig():
     with open('filekey.key', 'rb') as filekey:
@@ -115,7 +117,11 @@ async def main():
                     print(f"Subscribing to '{config['mqtt']['topic']}'")
                     await client.subscribe(config["mqtt"]["topic"])
                     async for message in messages:
-                        await on_message(message)
+                        if message.topic.endswith("ack"):
+                            continue
+                        pinSet = await on_message(message)
+                        state = message.payload.decode('utf-8') if pinSet else 'error'
+                        await client.publish(f"{message.topic}/ack", statue)
         except mqtt_async.MqttError as error:
             print(f"Error '{error}'. Reconnecting in {reconnect_interval} seconds.")
             await asyncio.sleep(reconnect_interval)
