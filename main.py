@@ -93,14 +93,16 @@ async def on_message(msg) -> bool:
         return False
 
 def readConfig():
-    with open('filekey.key', 'rb') as filekey:
-        key = filekey.read()
-    with open('config.yaml', 'rb') as input:
-        encrypted = input.read()
-
-    fernet = Fernet(key)
-    config = fernet.decrypt(encrypted)
-    return yaml.safe_load(config)
+    config = {}
+    config['server'] = os.getenv('MQTT_HOST')
+    config['port'] = os.getenv('MQTT_PORT')
+    config['user'] = os.getenv('MQTT_USER')
+    config['password'] = os.getenv('MQTT_PWD')
+    config['topic'] = os.genenv('MQTT_TOPIC')
+    
+    mqtt = {}
+    mqtt['mqtt'] = config
+    return mqtt
 
 def signal_handler(signal, frame):
     print('Disconnecting')
