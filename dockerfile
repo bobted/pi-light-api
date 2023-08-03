@@ -1,4 +1,4 @@
-FROM --platform=linux/arm/v6 arm32v6/python:3.9.14-alpine
+FROM --platform=linux/arm/v6 balenalib/raspberry-pi-python:3.9.14-bookworm
 
 WORKDIR /app
 
