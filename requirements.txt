@@ -1,6 +1,7 @@
 typing_extensions
 PyYAML
 urllib3
+RPi.GPIO
 paho-mqtt
 asyncio
 asyncio-mqtt
