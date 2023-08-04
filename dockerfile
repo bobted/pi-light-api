@@ -8,13 +8,13 @@ RUN apt-get update \
 
 RUN apt-get install rustc -y
 
-RUN pip install 'fastapi==0.100.0'
-RUN pip install paho-mqtt
-RUN pip install 'PyYAML==6.0'
+RUN pip install typing_extensions
+RUN pip install PyYAML
 RUN pip install urllib3
-RUN pip install 'typing_extensions==4.6.3'
+RUN pip install paho-mqtt
 RUN pip install asyncio
 RUN pip install asyncio-mqtt
+RUN pip install 'fastapi==0.90.0'
 
 #####COPY *.txt /app/
 #####RUN pip install -r requirements.txt \
