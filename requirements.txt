@@ -1,7 +1,7 @@
-fastapi==0.100.0
-paho-mqtt
-PyYAML==6.0
+typing_extensions
+PyYAML
 urllib3
-typing_extensions==4.6.3
+paho-mqtt
 asyncio
 asyncio-mqtt
+fastapi==0.90.0

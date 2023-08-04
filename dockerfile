@@ -4,21 +4,11 @@ WORKDIR /app
 
 RUN pip install --upgrade pip
 RUN apt-get update \
-    && apt-get install cargo -y
+    && apt-get install cargo rustc -y
 
-RUN apt-get install rustc -y
-
-RUN pip install typing_extensions
-RUN pip install PyYAML
-RUN pip install urllib3
-RUN pip install paho-mqtt
-RUN pip install asyncio
-RUN pip install asyncio-mqtt
-RUN pip install 'fastapi==0.90.0'
-
-#####COPY *.txt /app/
-#####RUN pip install -r requirements.txt \
-#####    && rm /app/requirements.txt
+COPY *.txt /app/
+RUN pip install -r requirements.txt \
+    && rm /app/requirements.txt
 
 COPY *.py /app/
 
