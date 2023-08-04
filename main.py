@@ -133,11 +133,11 @@ async def main():
             await asyncio.sleep(reconnect_interval)
 
 ### for running in console w/o endpionts
-#print ("Starting in console")
-#asyncio.run(main())
+print ("Starting in console")
+asyncio.run(main())
 
 ### for running as service
-@app.on_event("startup")
-async def startup_event():
-    print ("Starting")
-    asyncio.create_task(main())
+#@app.on_event("startup")
+#async def startup_event():
+#    print ("Starting")
+#    asyncio.create_task(main())
