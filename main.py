@@ -92,6 +92,7 @@ async def on_message(msg) -> bool:
         return False
 
 def readConfig():
+    pirnt ("Reading configuration from environment")
     config = {}
     config['server'] = os.getenv('MQTT_HOST')
     config['port'] = os.getenv('MQTT_PORT')
@@ -133,4 +134,5 @@ async def main():
 ### for running as service
 @app.on_event("startup")
 async def startup_event():
+    print ("Starting")
     asyncio.create_task(main())

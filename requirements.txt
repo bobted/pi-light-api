@@ -4,5 +4,5 @@ urllib3
 RPi.GPIO
 paho-mqtt
 asyncio
-asyncio-mqtt
+aiomqtt
 fastapi==0.90.0
