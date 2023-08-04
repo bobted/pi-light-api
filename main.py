@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 import RPi.GPIO as GPIO
 import time, yaml, signal, os, re
-from cryptography.fernet import Fernet
 import paho.mqtt.client as mqtt
 import asyncio_mqtt as mqtt_async
 import asyncio

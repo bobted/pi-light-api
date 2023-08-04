@@ -1,6 +1,0 @@
-mqtt:
-  topic: ""
-  server: ""
-  port: 1883
-  username: ""
-  password: ""
